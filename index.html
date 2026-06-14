@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08080a">
+<meta name="description" content="Consulta individual de resultados da campanha Delta 360 do Estrategia Carreiras Juridicas.">
+<title>Consulta de Resultados | Delta 360º</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08080a; --bg2:#0d0d11; --ink:#ECECF1; --muted:#9a9aa6; --muted2:#74747f;
+    --gold:#E6C168; --gold-br:#F6DD97; --bronze:#A87B3C;
+    --line:rgba(201,162,75,.34); --line-soft:rgba(201,162,75,.16);
+    --panel:rgba(18,18,23,.72); --panel-2:rgba(24,24,30,.66);
+    --silver-a:#f5f6f8; --silver-b:#c7ccd6; --silver-c:#878d99;
+    --danger:#e88f7f; --danger-bg:rgba(232,120,100,.10); --danger-line:rgba(232,120,100,.42);
+    --track:rgba(255,255,255,.07);
+    --shadow:0 24px 60px -28px rgba(0,0,0,.85);
+    --r:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    min-height:100dvh; position:relative; overflow-x:hidden;
+    padding:clamp(20px,5vw,56px) 18px calc(env(safe-area-inset-bottom) + 36px);
+  }
+  .bg{position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(120% 80% at 50% -8%, rgba(201,162,75,.16), rgba(201,162,75,0) 46%),
+      radial-gradient(90% 60% at 50% 0%, rgba(120,96,42,.10), rgba(0,0,0,0) 60%),
+      linear-gradient(180deg,#0c0c10 0%, #08080a 38%, #060608 100%);
+  }
+  .bg::after{content:""; position:absolute; inset:0;
+    background:radial-gradient(130% 100% at 50% 38%, rgba(0,0,0,0) 52%, rgba(0,0,0,.55) 100%);}
+  .rings{position:fixed; top:-12vmin; left:50%; transform:translateX(-50%); z-index:-1;
+    width:min(120vmin,860px); aspect-ratio:1; opacity:.5; pointer-events:none;}
+  .rings svg{width:100%; height:100%; display:block; animation:spin 90s linear infinite;}
+  .dot{position:fixed; z-index:-1; width:3px; height:3px; border-radius:50%;
+    background:var(--gold); box-shadow:0 0 8px 1px rgba(230,193,104,.6);
+    opacity:.0; animation:rise linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes rise{
+    0%{transform:translateY(14px) scale(.7); opacity:0}
+    18%{opacity:.55} 82%{opacity:.4}
+    100%{transform:translateY(-46px) scale(1); opacity:0}
+  }
+
+  .wrap{max-width:640px; margin:0 auto; position:relative;}
+
+  .hero{text-align:center; padding:8px 6px 4px; animation:fade .7s ease both;}
+  .eyebrow{font-size:.7rem; letter-spacing:.42em; text-transform:uppercase;
+    color:var(--gold); font-weight:600; margin:0 0 18px; padding-left:.42em;}
+  .brand{font-family:'Oswald',sans-serif; line-height:.86; margin:0 0 6px; user-select:none;}
+  .brand .delta{
+    display:block; font-weight:700; letter-spacing:.01em;
+    font-size:clamp(2.7rem,11.5vw,4.4rem);
+    background:linear-gradient(180deg,var(--silver-a) 0%, var(--silver-b) 46%, var(--silver-c) 56%, #eef0f3 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(255,255,255,.18)) drop-shadow(0 6px 18px rgba(0,0,0,.55));
+  }
+  .brand .v360{
+    display:block; font-weight:700; letter-spacing:.005em; margin-top:-.06em;
+    font-size:clamp(2rem,8.4vw,3.3rem);
+    background:linear-gradient(180deg,#fbe6b0 0%, var(--gold) 42%, #9a6f2e 62%, #f2d588 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 2px 10px rgba(154,111,46,.45));
+  }
+  .subhead{font-family:'Oswald',sans-serif; font-weight:300; text-transform:uppercase;
+    letter-spacing:.24em; font-size:clamp(.92rem,2.6vw,1.12rem); color:#dfe0e6;
+    margin:14px 0 0; padding-left:.24em;}
+  .lede{color:var(--muted); font-size:.95rem; max-width:440px; margin:14px auto 0;}
+  .status{display:inline-flex; align-items:center; gap:9px; margin-top:18px;
+    padding:7px 15px; border:1px solid var(--line-soft); border-radius:999px;
+    background:rgba(201,162,75,.05); color:var(--gold);
+    font-size:.685rem; letter-spacing:.13em; text-transform:uppercase; font-weight:600;}
+  .status .pip{width:6px; height:6px; border-radius:50%; background:var(--gold);
+    box-shadow:0 0 8px 1px rgba(230,193,104,.7);}
+
+  .card{margin-top:clamp(26px,5vw,40px); padding:clamp(22px,4.4vw,32px);
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--line); border-radius:var(--r);
+    box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.04);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    position:relative; animation:fade .7s .08s ease both;}
+  .card::before{content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
+    background:linear-gradient(135deg, rgba(246,221,151,.55), rgba(201,162,75,0) 38%, rgba(201,162,75,0) 64%, rgba(168,123,60,.4));
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none;}
+  .field-label{display:block; font-size:.74rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--gold); font-weight:600; margin:0 0 10px;}
+  .input-row{position:relative;}
+  .tel{width:100%; font-family:'Oswald',sans-serif; font-weight:500;
+    font-size:1.5rem; letter-spacing:.04em; color:var(--ink);
+    background:rgba(0,0,0,.34); border:1px solid rgba(255,255,255,.12);
+    border-radius:13px; padding:16px 18px; outline:none;
+    transition:border-color .2s, box-shadow .2s, background .2s;}
+  .tel::placeholder{color:#5b5b66; font-weight:400; letter-spacing:.02em;}
+  .tel:focus{border-color:var(--gold); background:rgba(0,0,0,.45);
+    box-shadow:0 0 0 3px rgba(230,193,104,.16);}
+  .hint{margin:11px 2px 0; font-size:.82rem; color:var(--muted2);}
+  .btn{margin-top:18px; width:100%; border:0; cursor:pointer;
+    font-family:'Oswald',sans-serif; font-weight:600; text-transform:uppercase;
+    letter-spacing:.16em; font-size:1rem; color:#1a1305; padding:16px 20px; border-radius:13px;
+    background:linear-gradient(180deg,#f7e09f 0%, var(--gold) 50%, #b98a3c 100%);
+    box-shadow:0 14px 30px -14px rgba(201,162,75,.7), inset 0 1px 0 rgba(255,255,255,.5);
+    transition:transform .12s, filter .2s, box-shadow .2s;}
+  .btn:hover{filter:brightness(1.06); box-shadow:0 18px 34px -14px rgba(201,162,75,.85), inset 0 1px 0 rgba(255,255,255,.5);}
+  .btn:active{transform:translateY(1px) scale(.995);}
+  .btn[disabled]{opacity:.6; cursor:default; filter:grayscale(.2);}
+  :focus-visible{outline:2px solid var(--gold-br); outline-offset:3px;}
+
+  .msg{display:none; margin-top:18px; padding:15px 17px; border-radius:13px;
+    background:var(--danger-bg); border:1px solid var(--danger-line); color:var(--danger);
+    font-size:.92rem; align-items:flex-start; gap:11px;}
+  .msg.show{display:flex; animation:fade .35s ease both;}
+  .msg svg{flex:0 0 auto; margin-top:1px;}
+  .shake{animation:shake .4s;}
+  @keyframes shake{10%,90%{transform:translateX(-2px)}30%,70%{transform:translateX(4px)}50%{transform:translateX(-6px)}}
+
+  .result{display:none; margin-top:18px;}
+  .result.show{display:block; animation:rise-in .55s cubic-bezier(.2,.7,.2,1) both;}
+  @keyframes rise-in{from{opacity:0; transform:translateY(14px)}to{opacity:1; transform:none}}
+  .result-head{display:flex; align-items:center; gap:10px; justify-content:center;
+    font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold);
+    font-weight:600; margin-bottom:22px;}
+  .result-head .rule{height:1px; width:42px; background:linear-gradient(90deg,transparent,var(--line));}
+  .result-head .rule.r{background:linear-gradient(90deg,var(--line),transparent);}
+
+  .gauge{position:relative; width:200px; height:200px; margin:0 auto 6px;}
+  .gauge svg{width:100%; height:100%; transform:rotate(-90deg); display:block;
+    filter:drop-shadow(0 6px 20px rgba(154,111,46,.4));}
+  .gauge .track{fill:none; stroke:var(--track); stroke-width:11;}
+  .gauge .prog{fill:none; stroke:url(#gold); stroke-width:11; stroke-linecap:round;
+    transition:stroke-dashoffset 1.1s cubic-bezier(.2,.7,.2,1);}
+  .gauge-center{position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center;}
+  .gauge-num{font-family:'Oswald',sans-serif; font-weight:700; line-height:1;
+    font-size:3rem; letter-spacing:.01em;
+    background:linear-gradient(180deg,#fbe6b0,var(--gold) 55%,#a9772f);
+    -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .gauge-num .pc{font-size:1.4rem; vertical-align:top; margin-left:1px;}
+  .ring-label{text-align:center; font-size:.7rem; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--gold); font-weight:600; margin:11px 0 3px;}
+  .cap{text-align:center; color:var(--muted2); font-size:.8rem; margin:0 0 14px;}
+
+  .badge-row{text-align:center; margin:0 0 20px;}
+  .badge{display:inline-flex; align-items:center; gap:8px;
+    padding:8px 16px; border-radius:999px; font-size:.71rem; letter-spacing:.06em;
+    text-transform:uppercase; font-weight:600; line-height:1;}
+  .badge svg{flex:0 0 auto;}
+  .badge.ok{color:var(--gold-br); background:rgba(201,162,75,.1); border:1px solid var(--line);}
+  .badge.no{color:#bdb8ab; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.13);}
+
+  .metrics{display:grid; grid-template-columns:1fr 1fr; gap:13px;}
+  .tile{background:rgba(0,0,0,.28); border:1px solid var(--line-soft); border-radius:14px;
+    padding:18px 16px; text-align:center;}
+  .tile .num{font-family:'Oswald',sans-serif; font-weight:700; color:#f0e7d2;
+    font-size:2.3rem; line-height:1;}
+  .tile .num .sub{font-family:'Inter',sans-serif; font-weight:500; font-size:.92rem;
+    color:var(--muted); margin-left:5px; letter-spacing:.01em;}
+  .tile .lbl{font-size:.66rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--gold); font-weight:600; margin-top:9px;}
+  .again{display:block; width:100%; margin-top:18px; background:transparent; cursor:pointer;
+    border:1px solid rgba(255,255,255,.14); color:var(--muted); border-radius:12px;
+    font-family:'Oswald',sans-serif; letter-spacing:.14em; text-transform:uppercase;
+    font-size:.8rem; font-weight:500; padding:13px; transition:border-color .2s,color .2s;}
+  .again:hover{border-color:var(--line); color:var(--gold);}
+
+  .foot{text-align:center; margin:34px auto 0; max-width:640px;}
+  .foot .brandmark{font-family:'Oswald',sans-serif; font-weight:600; letter-spacing:.26em;
+    text-transform:uppercase; font-size:.78rem; color:#cfd0d6;}
+  .foot .sub{font-size:.72rem; color:var(--muted2); margin-top:7px; letter-spacing:.04em;}
+
+  @keyframes fade{from{opacity:0; transform:translateY(8px)}to{opacity:1; transform:none}}
+
+  @media (max-width:430px){
+    .metrics{grid-template-columns:1fr;}
+    .gauge{width:178px; height:178px;}
+    .gauge-num{font-size:2.7rem;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important; transition:none !important;}
+    .rings svg{animation:none !important;}
+  }
+</style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="rings" aria-hidden="true">
+    <svg viewBox="0 0 400 400" fill="none">
+      <circle cx="200" cy="200" r="150" stroke="rgba(201,162,75,.22)" stroke-width="1"/>
+      <circle cx="200" cy="200" r="120" stroke="rgba(201,162,75,.16)" stroke-width="1" stroke-dasharray="2 7"/>
+      <circle cx="200" cy="200" r="186" stroke="rgba(201,162,75,.10)" stroke-width="1"/>
+      <circle cx="200" cy="200" r="92" stroke="rgba(201,162,75,.10)" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <main class="wrap">
+    <header class="hero">
+      <p class="eyebrow">Estratégia Carreiras Jurídicas</p>
+      <h1 class="brand"><span class="delta">DELTA</span><span class="v360">360º</span></h1>
+      <p class="subhead">Consulta de Resultados</p>
+      <p class="lede">Informe o telefone cadastrado para conferir seu desempenho final na campanha Delta 360º.</p>
+      <span class="status"><span class="pip"></span>Ranking final · resultado encerrado · 11 quizzes</span>
+    </header>
+
+    <section class="card" aria-label="Consulta individual">
+      <label class="field-label" for="tel">Telefone cadastrado</label>
+      <div class="input-row">
+        <input id="tel" class="tel" type="tel" inputmode="numeric" autocomplete="off"
+               placeholder="(00) 00000-0000" aria-describedby="hint">
+      </div>
+      <p class="hint" id="hint">Digite o telefone usado na inscrição. Aceita com ou sem +55, DDD, espaços ou traços.</p>
+      <button id="go" class="btn" type="button">Consultar resultado</button>
+
+      <div class="msg" id="msg" role="alert" aria-live="assertive">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17h.01"/></svg>
+        <span id="msg-text"></span>
+      </div>
+
+      <div class="result" id="result" aria-live="polite">
+        <div class="result-head"><span class="rule"></span>Seu desempenho final<span class="rule r"></span></div>
+        <div class="gauge">
+          <svg viewBox="0 0 200 200">
+            <defs>
+              <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#fbe6b0"/><stop offset=".5" stop-color="#E6C168"/><stop offset="1" stop-color="#A87B3C"/>
+              </linearGradient>
+            </defs>
+            <circle class="track" cx="100" cy="100" r="86"/>
+            <circle class="prog" id="prog" cx="100" cy="100" r="86"/>
+          </svg>
+          <div class="gauge-center">
+            <div class="gauge-num"><span id="pct">0</span><span class="pc">%</span></div>
+          </div>
+        </div>
+        <p class="ring-label">Percentual de acertos</p>
+        <p class="cap" id="cap"></p>
+        <div class="badge-row"><span class="badge" id="badge"></span></div>
+        <div class="metrics">
+          <div class="tile">
+            <div class="num"><span id="q">0</span><span class="sub" id="qd">de 11</span></div>
+            <div class="lbl">Quizzes participados</div>
+          </div>
+          <div class="tile">
+            <div class="num" id="score">0</div>
+            <div class="lbl">Score total</div>
+          </div>
+        </div>
+        <button class="again" id="again" type="button">Consultar outro telefone</button>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div class="brandmark">Estratégia Carreiras Jurídicas</div>
+      <div class="sub">Consulta individual de resultados · Delta 360º</div>
+    </footer>
+  </main>
+
+<!--
+  NOTA DE PRIVACIDADE (aplicacao estatica):
+  Pagina 100% front-end. Telefones guardados como hash SHA-256 (sal + numero canonico),
+  nunca em texto puro. E-mail e posicao no ranking nao foram embutidos. Score e
+  elegibilidade ficam no codigo, sem vinculo a identidade. Hash eleva a barra, mas
+  nao e protecao forte: telefone tem poucos digitos e admite forca bruta. Para
+  protecao real, migrar a consulta para backend (ex.: Apps Script + Sheets protegida).
+-->
+<script>
+  const SALT = "delta360::eclj::v2::";
+  const DB = [{"h":"fda0c013e1ff63a89a9db1e76fd290f3ee98c911fd3a668e69348b9b3f1ead03","q":11,"d":11,"s":1100,"m":1100,"e":1},{"h":"25d046c4258c481d2d17bc9fc30e5f98540af2fe0ecc9d38dc2254f432ac49a0","q":11,"d":11,"s":1100,"m":1100,"e":1},{"h":"085f62d474f044f8c59a183bdf90758a75debe4ea0632358472e9cb86bf9d627","q":11,"d":11,"s":1100,"m":1100,"e":1},{"h":"9de81aefda89aa7a86f71e113cce8e7759825ad4101e6a6353de444dfc944421","q":11,"d":11,"s":1100,"m":1100,"e":1},{"h":"e724ac310c4a2c93245a5ddf3f54ed850ee4e32a0b2c8253a9530aa323e8ac66","q":11,"d":11,"s":1100,"m":1100,"e":1},{"h":"b4b9b9dd155b9e983a56bdcb51eea7e3a9687c6b1576990e3d76fe5747cb4884","q":11,"d":11,"s":1100,"m":1100,"e":1},{"h":"d280a74d77e5b826bfa4d7dd29600a1712de748c24fc4740880b37adff6c88e9","q":11,"d":11,"s":1100,"m":1100,"e":1},{"h":"6a4d77d8687af930220e4331bb088bf56d06374e224ad44378dd151a5a8fc7ec","q":11,"d":11,"s":1100,"m":1100,"e":1},{"h":"9a714bb08545fa1a65dd53315a34afeb83a6a6de761fe111af4f1fbd6914fb23","q":11,"d":11,"s":1100,"m":1100,"e":1},{"h":"ba5bbeb09964183e19ee5f7d82973895c828d27f3b31fdcee30b73889dfac31a","q":11,"d":11,"s":1100,"m":1100,"e":1},{"h":"8e552b8264603b2508fbb0205862d7b818f26e190111384ebf57dc9ca24f7ed5","q":11,"d":11,"s":1100,"m":1100,"e":1},{"h":"6639ccfa17e023971018f94402b8b99875da3a7d0588d79251b1249793d0c5d0","q":11,"d":11,"s":1100,"m":1100,"e":1},{"h":"3df3e11b8669e185352e7177d4ff4e6025f92b078a93b2e56666e239e31261e0","q":11,"d":11,"s":1080,"m":1100,"e":1},{"h":"1b4d99f3b260aa287a1ffae998f9a3a12e3476dcf90d2b07ca0a934e9614233e","q":11,"d":11,"s":1080,"m":1100,"e":1},{"h":"eef95f0fb37a591df235da919d81130292adc8b3f38a0d9b2697865cb2ae0e32","q":11,"d":11,"s":1080,"m":1100,"e":1},{"h":"3095a41f329b143a589bfcf23e640f833d6f58e63fa17fb807832aa076955005","q":11,"d":11,"s":1080,"m":1100,"e":1},{"h":"ffb11fa2baf142998ae358ce8a7d5a5b8a0f5812c1a56b5f8552251fb6679f7b","q":11,"d":11,"s":1080,"m":1100,"e":1},{"h":"18f6e850f94ea3b69e25d32bfbe23d57b8a043237f3896c582a58b1c2741f74d","q":11,"d":11,"s":1080,"m":1100,"e":1},{"h":"6c7bc5825bad05495587a8d7c49c7a6ab478f823b2cc8ec47fea3e088db57abd","q":11,"d":11,"s":1080,"m":1100,"e":1},{"h":"83049cfbcdd19b2980ca5c787b3d1c721909280394980ffe855811273cf7f864","q":11,"d":11,"s":1080,"m":1100,"e":1},{"h":"273128c7c15952aebddfe35df76d269b2f33c4fc0b43de02de14028cbb5bbea5","q":11,"d":11,"s":1080,"m":1100,"e":1},{"h":"36ebfc9256b6c476803a65d4ed550345e524451f6a72fd31dc7be67cd54db861","q":11,"d":11,"s":1080,"m":1100,"e":1},{"h":"aa70d9a18459d337e534e80744bb4e9d7b98b9ac9f1363becf667799ff3f1cbf","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"5fc84de910bccbc9cd870451cc1e4e249fd93d504dd0b709d9762ce1d28118c6","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"8ed0f7339cd9be73b02cea732c4e33a8fe505694a95437067a9145e3efa750e8","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"cbed3fe8b77416961df09a61989d9d7cded4e786ba7e96582405f0a98a3bf3b0","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"ca77fdb1d435f336bed09cabb3ba1fd3489ea5e01e77a0902ab203802a5b7fc3","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"044e0af669b80a06b6b507e21e3dda5e8f1a1f3f02ca6486c1b33327e7f52657","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"39ff12e0ceb114b4b777e85411e94fef920c91f43f2f3596bd2d1cdd89a5dfe8","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"d42736fe28c906fcec18a63656f4fc22ed8c8c3ac5558cc8ecb9d6675d74aeeb","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"0da3d84b957e95e88e79bfaa3d1d5cc77960066a48cf923bb4264d6312c9b6d6","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"6ae43615aa5689a55935a3a6fe730a6868fe1603129f3d9b7eb3e8a101d58d1b","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"4a9bb36c002bfedea6563e08d3592050efaf7342b56cb60d16c633e2618a8d5e","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"c72edc87e61cfd4eb69caa882b83ca1649691ce4c3103863150273a44e798682","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"4cc6bc947d7fd72420a625c2afd0d36bd085854e9de88a0ef9530b1277eaf198","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"9e9a0e0e30cf45c665cbf78401a876fe75058657b208381aa6ab6b2ee0f58943","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"53fc01d5208e967552b13c01cc2e70df25265120b10e08f76ae1ae45a374ff90","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"ef1baa5a1709e4286c6c7b321a673ea2d5b99880c70d1b3932e4fcfd334ba53c","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"240ada834fb398dac838c728b37da0180c13ed09e9c96d4b1a40b57aacec8479","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"331736f5239ba8ffa78ac40c09b6ceca4b2a76542a35ae8d2dcb6bcac84e9461","q":11,"d":11,"s":1060,"m":1100,"e":1},{"h":"2c46bacfe6bd7b9b1e05d20f49939b9684525d6191e6e4eacde2df6eea923094","q":11,"d":11,"s":1040,"m":1100,"e":1},{"h":"b2829d7376245db945206e80a3b35844af7a17c38fff6fddc89d1222bdafff3b","q":11,"d":11,"s":1040,"m":1100,"e":1},{"h":"89c4a902a066e5e151962098c5b8d6ecbf886a907b103350aeec597e0cce1094","q":11,"d":11,"s":1040,"m":1100,"e":1},{"h":"e537b1818496d0580b5449252600518bec97fd07fd152b8b5cc1569922b4d351","q":11,"d":11,"s":1040,"m":1100,"e":1},{"h":"a311d21a3e0c97f301ed5477e13ef450f8b32c6e8b0aad9f5fcd336050579241","q":11,"d":11,"s":1040,"m":1100,"e":1},{"h":"18e6996ca5cc92a5a03d4318f6b5b823fd7a804f5b501183a3eb4aceac7c61cc","q":11,"d":11,"s":1040,"m":1100,"e":1},{"h":"480a6b7ec135964b1646bc53d51dfe76381a94a64f0306828ae4f3ff6277598c","q":11,"d":11,"s":1040,"m":1100,"e":1},{"h":"6b61a729865dadca1bff7b5c764d90520d2b44493baf591a9e748b7df55b88b9","q":11,"d":11,"s":1040,"m":1100,"e":1},{"h":"d1a3ae87caed2b2b19f56d698babedf7f5e22d9e071bbc679a2d4790359f14fa","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"e3b5c11fda1c2e7197171f0a3756010218a22e1a39628e533f5702eaad3fe4d1","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"bd6040b5c38fc650da67dce3a78a527b7ce4d47a58f2d31db885e5e68c07ff7b","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"4d2066c468dfd1db97cbfece9b322d6873ff5bdaee8cdc7d0e52779f59dad9e6","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"65d033123a4d680018958c58d02fb63440ad2da5105b5cd195e4c184d3259bac","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"202bf0fcb0eb3326b663464b5d3a52e3c6fb284876408dd83378ccb5bd07203f","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"2b321cd5a25e1be6d9fbdecb3b03a50fd566a0efb6952b4b1eb0b4f3cc7ba177","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"0aa59a90401a0a218732f5b308594650859f469aca52843f117957affdc6f005","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"e849c546a089ecadd91de7674e380aa7b293c082ec888fda684f33ac7964de88","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"4fa8774e143bfee14c7bd7ad236aff10507be6e5a7606829a9c98198ccc6660a","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"31332d4156ff997b3c58e31c54e62f7dae1aa202fa37a5a196b6710b7c300c81","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"ee12faefc511297eb2d1f5e88060587414ca123c99ae285fb5be2bf6e6a27c20","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"6906d4d7278553ea6cfff94d0ad7eb65da3ee46691a170d456f8f61d0a8853bd","q":11,"d":11,"s":1020,"m":1100,"e":1},{"h":"8e129520e731dc1d22383a3f5def2881282108cd466bbcc48d79d037669d546c","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"e12813365aa7be94280e7e7d7fde49c0e93b688f54ee219b0ef779f7b455a734","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"efeb20a698bd7c32e0efd2e42ad72220adc0bbec59a3343b62dc46c03bf56d5e","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"55ac7bab5c956de45a16af2741190c240ac1bcf9959f88441a52d4b7aee67796","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"a26ab158bbd46ee6b5c23847ce534eb5c6920b564638dc35c5473373f0eaf5c7","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"03204a87f29565a4cb5efdf2026bf0cc74d4822ba1f838e40d4c9b0cfc2df157","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"b2e699a9ee8e7bfc66af497620121661622306e79cde763178fa08f23f742911","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"273dc1ea01bb81a1d97574d0ef4c7aa49b3c1dd421cd6c5c31bc86b56ada20fb","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"cf11ad36a0b34ee1316c48de6fa73e33312e62c74a88fab29d7e02657332187a","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"3aeb6fc3fba8b15c25731e21c22f7d9b10b9094fad377e88b106d37357c7c588","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"6ffb3b5b599a6c0dc215016b48602f09d30f9810848d75d99fab3794cad31dab","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"b1fb29a460e75b131d92b6018cf533af547821db3e9277611b2d7597b6d7a626","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"7ca0dad1bdc87467a102f32b05dae9192c2641a813e20c19ba88da60f4e813b8","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"3f11abc1779eee42ff3d1419cae76a2840263699b57000543a12b08034504ade","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"cc63e64f3c2335cb7d3fda6b284c0833a074c98c501b8b7d9fc0dc845bf6b34d","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"f3dc1d395dcda02eae1a1173b5386af86bac7d7bf39c232e7aeaf66f8185f9df","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"ce9a4f231ecba69e3830641ba034fcf5f84debfe880bf59ece880f849f9eb0a7","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"4c20d2c4c03c070ed679058c5c114a6ddd50b785ab107fd2c7e3811b973ee82c","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"f70511bd00d1cdbbdb1da016e4553d8bb8bd2a8efc7ad1fc26bd717424036517","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"08ff945222faa8e3316139cd8eddc7d16b0984dbdda630bd58905bee6cd95f29","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"470888e71af22a4833d54f7018410c96c72cb33535c26fab78bf8da453506086","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"34e8a3961ef3965f2fc5ad7504a3f20fa3a24303ce7accd7af61164a89142ab5","q":10,"d":11,"s":1000,"m":1100,"e":1},{"h":"94289f3c556e263693dce29b7f5260f40f6d13eed2b84ea2d4ee80a9b4f76946","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"3190a6406a4b45ad3e054fa37018462e0940bd9d62e2114728c65123a69d3924","q":11,"d":11,"s":1000,"m":1100,"e":1},{"h":"6058bdeb66a04006a7e322178c8e6350758069b17c9553f76b09765cb5d87ac0","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"4d22d7c3fdf05028ba5f30b7334863881026cb72e094d3eb52b8cdc902842f8d","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"2571177d5fd594dbe3e65120facf380622aa908d605ddf329f5cb3eb63042297","q":10,"d":11,"s":980,"m":1100,"e":1},{"h":"8f99ff48de4fef4cbb7121703ada13d477abd9ee8af61954bf9fca97130ce395","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"4e2c0319a35cb7b2e543a925ae5daf4b6755b4f6f43db6d743499b07403b8055","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"dfb83ec640dea1ca6e2ddd2e134857a7a0f39b1e0e92df0aa7f01362787350e9","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"7a902737fe8d0cf1ca2744f9ef263db1799915691f371e690fb0b0aad1d39517","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"b25543b1d6a86c4c5214241a45df834d954f726dc22e9ce5e4a2af72a121e075","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"3140d0e919c7b25c44351c7f3c87ea72546c482dc1739ed87af53a3a31701aa7","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"4750f13e43a104846e4f78245cb0a525b074164becce78b28f069d6a851aa221","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"1f2d8bc374f958af2a726c332f7b84bc62282c2495d4db52fbf60027621a85f6","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"66e346e953ad02d2c29ff0717d411ee08b3f48dea5db9e5dde2608d1a17dafb7","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"27bce6d394a66e46d8250cec442eea8132a2a6b5b88afa3cde431aa0918b6cb3","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"f9c44a9715d82c68170c179cb8248710d58def55d1e8c0fc0ce891e62642722d","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"899ba618127a04262355cef4ab7b5a4e06f6f48a1ad25f03eced422233fe369a","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"222c3b55dd79707ffecc1de47f301609fd5f171d2cd8ce7afe77e80fcc17c7df","q":11,"d":11,"s":980,"m":1100,"e":1},{"h":"9ebcea2721181a583b0bb56ddb6abf46a88ef7d931fb85bc3ce46075bb254011","q":10,"d":11,"s":980,"m":1100,"e":1},{"h":"66d6bee460b88025f88cf84f4f49bb4faee1f35ad0a5ca3eada20191d066f55a","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"e55e5145a819e4bde8016401b83c4c87777b9e0f7ce25bd4636f7baf722afa56","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"f24e915a48154046e0e7fb6b4895e3b52beaf4b6ee962c31035effab4e57fb32","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"9cc18ad04fb7141fd888554c4952020781b34679463ce4417ddc0a535f274253","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"beccdbd8ad4609510ad0cf5e47217e75b916eea283812dba2a4ae1a148fc1a12","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"b95f02fa3f05aca0405e43bf92b6615d8cdfcd9017a85b0154cea6159a9d0d7b","q":10,"d":11,"s":960,"m":1100,"e":1},{"h":"aeb615816505616823150535d027a48dfcf480e84db402538efce573221e7ffc","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"bd7e01f68a0222a0d8175f30df38da75d2f8e830193a53c6acc514b40ad27944","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"a5bb774707e6e037bb69f0216f1791a9d8300fb6766d2257872a6beb6e94192c","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"652c4db595b0c2ccb2d924bdf61f7f48392c3757c1ddecad0979a3736eb983a7","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"e3cb96ee5d278e23b2ed76040937ec006c6d5909e5ab84f0ccca288d30d67d9f","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"2801d19a0cb2313501322a8c9b96806784fe15ad9a29182c21e3dd93b05fd779","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"cf87e39aecd0d4b98d00c59cdfe295186b77d58e02e1c0b3df3a95a4ddf78f5e","q":10,"d":11,"s":960,"m":1100,"e":1},{"h":"141daafeeb20b5f9f7a1534c3588cbaf19c12969e04859727c0607ccb4d77573","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"d2d4e52519e9b20ade45d8dae1d18fcfcb92b4b97f590528289dab6ace04cb20","q":11,"d":11,"s":960,"m":1100,"e":1},{"h":"645da4470c8fc8a50b2eac5cf244d494dfeff6e3086d1773fc008e1ba8ff9c83","q":11,"d":11,"s":940,"m":1100,"e":1},{"h":"cbe185d3b7bf42a34bdf8c39ef364cfe6f4fd5e0da5ce2ad1836702d1ab968cf","q":11,"d":11,"s":940,"m":1100,"e":1},{"h":"37eae1d523e2ace56969f87118957c743f0306dd1bafaa0afcab92e2c0531897","q":11,"d":11,"s":940,"m":1100,"e":1},{"h":"6ce684eaa844b830ca8a2e06f4d866f9264497dcdf15d8f94c2271d94429059d","q":11,"d":11,"s":940,"m":1100,"e":1},{"h":"9091f7bed501b504466a15b4a79866c3c0c7d9c621a1cc2b45e0689635651d48","q":11,"d":11,"s":940,"m":1100,"e":1},{"h":"957ceeca87508e156ebe69d8b014deafb907216bec818236cb3121e8bbf32ec1","q":11,"d":11,"s":940,"m":1100,"e":1},{"h":"d552046ed7950bb98d389bc7225acd0741f499bdc0ff84ef3a418f187fe0801d","q":11,"d":11,"s":940,"m":1100,"e":1},{"h":"de2db52d3facdd01e3b676af2cb74f13302fc674ecc1b91ed6f2ce60c74609c6","q":11,"d":11,"s":940,"m":1100,"e":1},{"h":"fa563480e8e6caec2ef420ac25953770492c96723e19f36191e793ce4b97a6be","q":11,"d":11,"s":940,"m":1100,"e":1},{"h":"62c76ac7919d5244c68b10a27e9e62595089357b0cf78174f74583d105fa7900","q":10,"d":11,"s":920,"m":1100,"e":1},{"h":"058b758a6c05f66ab52ada9c504fb4d21551d2a5e254df4f74526fc3b5e7bef5","q":11,"d":11,"s":920,"m":1100,"e":1},{"h":"952d887269a268a732a6b23f144c1b2ab494513b6256a4ba0eab61a62eb3014d","q":11,"d":11,"s":920,"m":1100,"e":1},{"h":"477383c62dd2c5ff5a490e1098c3c4c65bd68811b7d040918a272d6a88b3f4a1","q":11,"d":11,"s":920,"m":1100,"e":1},{"h":"10659fa49bd89fd0094f84c397833a4ee14fd1371c5b8c83c19d15f3f54a2d92","q":11,"d":11,"s":920,"m":1100,"e":1},{"h":"a7d8f56c87a9876a05c13e0bf066c80934e5116aa0cbd65e9b8e99e75bd08444","q":11,"d":11,"s":920,"m":1100,"e":1},{"h":"deb147c71325142ccab21be7b708d67f6f1925d008edc1a907beca4bcb496920","q":10,"d":11,"s":920,"m":1100,"e":1},{"h":"b35a88f21d109c99922ff01595eff556dac511830055661c309d47cebc6f8e04","q":11,"d":11,"s":920,"m":1100,"e":1},{"h":"d62bd8fe9c78417b1a0c84b078bbf1514505386bd694f3b24dd973be3a621b38","q":11,"d":11,"s":900,"m":1100,"e":1},{"h":"86819d13414eb27837b0170c7deb82d776d414f7639df2128607c753a96aef3c","q":10,"d":11,"s":900,"m":1100,"e":1},{"h":"993ff2435ab153b82b9cb00c92cf8f51f6cd75c6b99ca8de2e29e64ce8f09d60","q":10,"d":11,"s":900,"m":1100,"e":1},{"h":"5204e8bc33ca2cb3854103f77c9507cfecc28574204bad9d0743bda0e5522c2c","q":11,"d":11,"s":900,"m":1100,"e":1},{"h":"6b70077feac1e016a29eae0dbe7aab00ebdecd48ded24f667385d9e2f0a7c22d","q":10,"d":11,"s":900,"m":1100,"e":1},{"h":"11f45eaaa37b5021a49cd53742fc8d77fe8644d553bf9b332f402f4101cb9c5a","q":11,"d":11,"s":900,"m":1100,"e":1},{"h":"6643413095ff1ec8abebc283cf83fe3c1ddef63ec84aa2e069805b41d655ffc9","q":11,"d":11,"s":900,"m":1100,"e":1},{"h":"e99a6352225068dfbea2cae690fffd721d1ad8be9fac8df19478ab052d50f342","q":11,"d":11,"s":880,"m":1100,"e":1},{"h":"7c72b4d7a76f9df34eecc6cef021c8f13f7f7f9a82443046a3c9584d2f9185f3","q":11,"d":11,"s":880,"m":1100,"e":1},{"h":"fd4f1ee1a06b3a8a5fce466471d5d2f67cb5d9a6038edfa08ff823bd97ffaf3a","q":10,"d":11,"s":880,"m":1100,"e":1},{"h":"5dd9d44e5e8ec5875e8a0e880c40a8471b950289cda69b883854639522c796c8","q":10,"d":11,"s":880,"m":1100,"e":1},{"h":"ec15b1fe97e6639bfae8d62e084250c0d27408516f84fa248ab02a3bb58fc336","q":9,"d":11,"s":880,"m":1100,"e":1},{"h":"28c1e825c815976a7dd9388f4a726e4cdc6ce9a8879c6164569f6846669eb22c","q":10,"d":11,"s":880,"m":1100,"e":1},{"h":"6a331dab07e99dbc05cfbeb7ff591e75f5b2cd999459d6d1fc5ddba29fda19f5","q":11,"d":11,"s":880,"m":1100,"e":1},{"h":"759a641bf4b274d4daa8ce0859f7201e817852cee900aab92fdea4d6a02698d4","q":11,"d":11,"s":860,"m":1100,"e":1},{"h":"4e32e3e4c47df590d7aaa9056553e75479a6f6a35a47ccc1000dddc9a77a6337","q":11,"d":11,"s":860,"m":1100,"e":1},{"h":"e511c830f475e32f8371f1864d39e504e6ce28d2f1350c3ed0c6aaff49abf7a6","q":11,"d":11,"s":860,"m":1100,"e":1},{"h":"abc1537af553a1f4c143749795c69d92331acf933c3ff4d708ea2cba13f7cc76","q":10,"d":11,"s":860,"m":1100,"e":1},{"h":"5d955b999fdfca6d401cf2269df8fd1b1edff8a3a24003fb210b82f962f53462","q":11,"d":11,"s":860,"m":1100,"e":1},{"h":"41db982aa2636ab883622d08fc3f7e5b263e2dbba613a84020736558420d4460","q":11,"d":11,"s":860,"m":1100,"e":1},{"h":"d331be04cc00b18117444dfc01f3ed8ff4289e124e8e428bffc6e8f76ff81a82","q":10,"d":11,"s":860,"m":1100,"e":1},{"h":"0141d400f281c4ea4e3b5a57cfbe36336e647b766523fbc0f605d95295d71b2b","q":11,"d":11,"s":840,"m":1100,"e":1},{"h":"2660756cba78b24fa76e392864172f4a3cbdcae9255114654c192e19082f608f","q":11,"d":11,"s":840,"m":1100,"e":1},{"h":"2a04f76d7b302a8e833def3e3790571e8d08f09532ab8ab7fa063cedf1c45b63","q":11,"d":11,"s":840,"m":1100,"e":1},{"h":"126886ed143cdc1cc6c5b9b59b664a919f2fbea841ce8afdb8e4b1dbb38e2d33","q":10,"d":11,"s":840,"m":1100,"e":1},{"h":"ce5f0e48ecabe195f4c78024ad6229a3d0e479f7d187b75481039c908a4553b3","q":10,"d":11,"s":840,"m":1100,"e":1},{"h":"ff2b8f8bed73f043b529fc791568fa61d3f3735e2a10b9bc028dda7ffb2fde0e","q":11,"d":11,"s":840,"m":1100,"e":1},{"h":"c7a93ec0a58bbfcdef74f5a1dd4fe3a757b0b4383e42c350d08c72dda7e6dfa3","q":10,"d":11,"s":820,"m":1100,"e":1},{"h":"af5b6bc037bdacfb3664f0a2f7ab137c2e9f6c3deed444d89c5fef924db4b507","q":11,"d":11,"s":820,"m":1100,"e":1},{"h":"6e0835137919f957c5b8d5b6bf08b8c2f157a6aa65b366a17a2e7af0e9c78455","q":9,"d":11,"s":820,"m":1100,"e":1},{"h":"a10558161f7cde8f310dc50500f1424ffb6ba4a28c098b9afef9e187b3cb23e1","q":10,"d":11,"s":820,"m":1100,"e":1},{"h":"2ff58adb512d6f0ae070b853ee995d244d2a52438422d2bc9ee481d9a97b7542","q":10,"d":11,"s":820,"m":1100,"e":1},{"h":"f77f30e957009aa70fee40fcfcedc45aa00e1756c86bc6330f9af86060857cf1","q":9,"d":11,"s":800,"m":1100,"e":1},{"h":"133c6e6374764c89c64f1f393dea06db1b51030105c979d0cdedeff0aa11335d","q":10,"d":11,"s":800,"m":1100,"e":1},{"h":"d608b23cc9776c7e0d420e9f3d88bef6152a99a238d4e8eeaa33f0e2ae9bef45","q":11,"d":11,"s":800,"m":1100,"e":1},{"h":"464fd2d6b0836cd3975656fcf4c1314bd276a39df24eaef160ed8e026f87c737","q":10,"d":11,"s":800,"m":1100,"e":1},{"h":"5e9b09eed377434cb32d2336935b07135b5c04522a4ded115550b8b96f20bd50","q":10,"d":11,"s":780,"m":1100,"e":1},{"h":"0710453d18d443ac18b03dbab84271b669e5b7489d5737e7e60b2b0d278511ab","q":11,"d":11,"s":780,"m":1100,"e":1},{"h":"00c87816691021c7fd0e9c57d7f8fda6420273f2863f3ebcce2c3eed94c6ec31","q":9,"d":11,"s":780,"m":1100,"e":1},{"h":"485bba7eeb466168f856cfad219d34846a604ebdbff039ec0fdd745d5c036fab","q":9,"d":11,"s":780,"m":1100,"e":1},{"h":"5d1f1d0a458fa5ba8631d57d563aeb09739a16013a05fc9203a257dc83440b10","q":10,"d":11,"s":780,"m":1100,"e":1},{"h":"8be7b04bb20c3f5f4cb5f95eac4a19c0f303730ef1ba20285e26a2079c63965f","q":10,"d":11,"s":760,"m":1100,"e":1},{"h":"da63cb9f71075ea91ccfbe2613aa4c2e054b2a49848cd16551c321f24f37cb9b","q":9,"d":11,"s":760,"m":1100,"e":1},{"h":"04575b1f18858715d823f263402ad6581fe8466ea0257ff58dde62d542a11dde","q":11,"d":11,"s":760,"m":1100,"e":1},{"h":"6deeccb234c32d5ec1b1c5c178d8e52982feea00b6951abf14b2b89945f12ba4","q":11,"d":11,"s":760,"m":1100,"e":1},{"h":"70ebe2749b00de2f05199ea4c1c6ad6d40280976bf5c359f32dcf432f2bff0e1","q":11,"d":11,"s":760,"m":1100,"e":1},{"h":"c47e9fdd425bfff74e0ade85b4b7d2d914d404ba45b3a635cff8b2cc96bc5d55","q":11,"d":11,"s":760,"m":1100,"e":1},{"h":"3a2aaa4ffa7f5f8b4bdf9c0df32d035b240504c2c4cefedf8701168d00c4e803","q":9,"d":11,"s":740,"m":1100,"e":1},{"h":"09db4756133e9dea123f90766f4479f457cdb8589aea5b0790b5c001139ac5dc","q":11,"d":11,"s":740,"m":1100,"e":1},{"h":"4b9a091a0b63e14b225fd4532fd5d1aec26dea5bac50328d3df07a792adc9568","q":11,"d":11,"s":740,"m":1100,"e":1},{"h":"d4e6ad647d368d78edf492b29963e5875eac77d4eb805ee839c41600b14dfb35","q":8,"d":11,"s":740,"m":1100,"e":1},{"h":"860a55e78924f969b9c5d36fa00e0a29f760981bf342ec7144ff88963eeae7a5","q":11,"d":11,"s":720,"m":1100,"e":1},{"h":"b518d4d291055cbc63ccb489a9ecd211b09020d6b67b31f26095e74d225bdccf","q":9,"d":11,"s":720,"m":1100,"e":1},{"h":"da4584be7d40e99c6ded7e6f811ad6d0d69a8b0c195178b929360f222d897d77","q":11,"d":11,"s":720,"m":1100,"e":1},{"h":"abadc2d3d04b99d85eebd392632d594bfd9edd439556a4287f6ec98d202d1260","q":9,"d":11,"s":720,"m":1100,"e":1},{"h":"ca3e82ad01b8790ec4f877d1a2c8950f4e5fc768347c429817b1ccd606d621d4","q":11,"d":11,"s":720,"m":1100,"e":1},{"h":"0682854df77f6bbbcd3f335c3cda93126f07d07905fcfee7de9282d175cc5260","q":9,"d":11,"s":720,"m":1100,"e":1},{"h":"a8a0751f1a9f77a8fadd56d801e9f47779e67f446b22a5047624e9c2be435c05","q":9,"d":11,"s":700,"m":1100,"e":1},{"h":"2368b863c25df5fe755cda6551de6bfca1fa6f97b1e42445f6b2005f70b9cd17","q":11,"d":11,"s":700,"m":1100,"e":1},{"h":"6e557cd210cf086a989320461818467193d6bbc4ffd602f55ef10e4885ac4073","q":10,"d":11,"s":700,"m":1100,"e":1},{"h":"a8959fcf432c354064d55474716a270f8d999354aa9a7ce14b35e31502e678d3","q":10,"d":11,"s":700,"m":1100,"e":1},{"h":"e96f2b2e8d7b1dbbbd59554568c613300a34121e4166213b826ba7a5076cceb2","q":9,"d":11,"s":680,"m":1100,"e":1},{"h":"7fa1baf0723538a87589b275c9f46942b89c7589fae6e7c97eb02a8ec5afde66","q":9,"d":11,"s":680,"m":1100,"e":1},{"h":"d0f12182bb90d864ed7781b6914fa778a2cc9f80845927a0218595acde6cc662","q":11,"d":11,"s":680,"m":1100,"e":1},{"h":"704ed3cb4b432d63fc3781aaa49537b5ad7b228eb9ffaf1ca59d2d1226371f0c","q":11,"d":11,"s":680,"m":1100,"e":1},{"h":"3617ff44b88969489ea7a436e38f4ab555e32debcf142b4cf10d50c366dafe5c","q":8,"d":11,"s":660,"m":1100,"e":1},{"h":"e9762224913e90c9211f3b95c0143d720c4eba05e183f2971515ec35b58a7077","q":10,"d":11,"s":660,"m":1100,"e":1},{"h":"ce026e15456997866a619ead54401b64af822f8ab256f52c949f14692522f77f","q":11,"d":11,"s":640,"m":1100,"e":1},{"h":"cce00c17301ecda117f613f59b620db342222b85f4a8ac1529475c529af5e561","q":11,"d":11,"s":640,"m":1100,"e":1},{"h":"5b304d19a4dfbb0d8189e052ce36e5883609d0acc0f5e86e57045ff57078d3ce","q":9,"d":11,"s":640,"m":1100,"e":1},{"h":"c7c4618b0d3fb6360ca0b535a1997d5d2a857f683b4b1c261286f8ab52860b1a","q":10,"d":11,"s":640,"m":1100,"e":1},{"h":"d4c59d2fa43c9806d65074a058c5626d4d856d180d5010451a000b932a89b609","q":8,"d":11,"s":640,"m":1100,"e":1},{"h":"52f3fb467fedf2c17654ca7fd40cd4198eb8817cebbdcb94872fb11b4ff12ce7","q":9,"d":11,"s":620,"m":1100,"e":1},{"h":"9c8b09e2422f704ba12d8d165b0501cff4bc0d9019cd905f292833837f9acf14","q":8,"d":11,"s":600,"m":1100,"e":1},{"h":"9ba03c90a2477849edabf42e9a38e8816751697a1340173e9d881226a2b5cb2c","q":11,"d":11,"s":560,"m":1100,"e":1},{"h":"58885e0740c56a554b17ef33e6eaeba07866135759b7b79c6871ddc810e29282","q":11,"d":11,"s":560,"m":1100,"e":1},{"h":"e44a267625f79996913c53a737321fed33dbc10d4ee881f23635bab7864089bb","q":8,"d":11,"s":560,"m":1100,"e":1},{"h":"74db2a62005ad0bc663034a4a207431beaafa3632514fbea0c345c5acc4e7431","q":8,"d":11,"s":520,"m":1100,"e":1},{"h":"aa72a4fea8dd8d2c683d33fcaa716168f33c607790fae4e6250d4576c9f65918","q":10,"d":11,"s":500,"m":1100,"e":1},{"h":"ddb78aa7d1b645a4e23032f039c616aa03f8d9842de4f562856e5a58dfccd231","q":11,"d":11,"s":500,"m":1100,"e":1},{"h":"099b661317919674cb7fec16416a58dfbcc8463108f3cfbf0e3555b95c4b5770","q":8,"d":11,"s":460,"m":1100,"e":1},{"h":"8fbaafac306d99418489028b28104a38762fb2ee360580422cf08322a490fd9a","q":10,"d":11,"s":440,"m":1100,"e":1},{"h":"6b85b6c211e6515db158bf743698394458d3378d735743010c26550607ca0d12","q":6,"d":11,"s":580,"m":1100,"e":0},{"h":"104973e92f2931010ba091bd6726c67c06c0a071087a848d5429e8392ca21f0a","q":7,"d":11,"s":560,"m":1100,"e":0},{"h":"ee3f3741731a32dc602e9b57dd20858d622f63100c0a82ccad37fbaa14513deb","q":7,"d":11,"s":560,"m":1100,"e":0},{"h":"92f497dd0625e65504f53dbb437dd5d4fb0d46875c0e6578161c8a8cd548fa51","q":6,"d":11,"s":560,"m":1100,"e":0},{"h":"fee3ead81028a7462d5464485e3e96093b29105fd55c9673657785b58b95c498","q":7,"d":11,"s":560,"m":1100,"e":0},{"h":"1a98cad999dfa97bc35de76447f7efbcb0d0efdd5f05a40891624b9d1ed97f5f","q":6,"d":11,"s":560,"m":1100,"e":0},{"h":"f461833d654bcd922e09cd652cbc404c48b769d91368770999bca5789e4e1a67","q":6,"d":11,"s":560,"m":1100,"e":0},{"h":"bdf88cdf1fedfaa626ffe5d70dc71f027b5b709734d337053b274e5143b35862","q":6,"d":11,"s":540,"m":1100,"e":0},{"h":"7210f8578c770a9570cd1c52de6082e7f464ca5d36aa4378fff6f7aec0411a39","q":6,"d":11,"s":520,"m":1100,"e":0},{"h":"6e6695e1a386546e4ad207ee97f6063ea5f4721d4036c3c7cebecb25565b5893","q":7,"d":11,"s":520,"m":1100,"e":0},{"h":"5a9e250ee9b0fb1925dd7209caf5d4d31f3dcee2add1da59c7f9f1aad4360f46","q":7,"d":11,"s":500,"m":1100,"e":0},{"h":"f70f5f4d0168c96ed382d90c183dc1e71d2a7c955d47b61cfa5c5fcc41630c26","q":6,"d":11,"s":500,"m":1100,"e":0},{"h":"cc51b1728af48925dace4ab43cf693b8b8e46d7c7812ee6e4f930122e13d816f","q":7,"d":11,"s":480,"m":1100,"e":0},{"h":"3b1ea8eebd7f2de5999787c8bdbc94b3a63ef39dfcad3f16e82887a4daf0911d","q":5,"d":11,"s":460,"m":1100,"e":0},{"h":"0aa988c3b3d3376d0339d45826c33e1f102705fc09a39017ed46220b0400743f","q":6,"d":11,"s":460,"m":1100,"e":0},{"h":"e82175c32b79b44a9e02b141e869b1b3641f3804160b4abfa4be0e31f3bd72a2","q":6,"d":11,"s":460,"m":1100,"e":0},{"h":"d7e48c13bf6048ba511972772ee33fce0ed51f3eea0ed43ada8cbf0eb0f6fb7a","q":6,"d":11,"s":460,"m":1100,"e":0},{"h":"d75fe78f11e2cdc55bb1cb045d5dde70f2009c8ad17a339b45e283b654bcb873","q":6,"d":11,"s":440,"m":1100,"e":0},{"h":"e9b34d75102fcc692f50c8e3e7e016772f82d3d29d06fa5e54607222a1e94b90","q":5,"d":11,"s":440,"m":1100,"e":0},{"h":"f15862e2bdd2364217c70ce802e37977ca7550c1f117e9f11c1ec1e63e9def6e","q":5,"d":11,"s":440,"m":1100,"e":0},{"h":"23f2cb934cf88d82b9ed19dd8b5f7256d51a126763443168a8dbbe05d9ededd1","q":5,"d":11,"s":440,"m":1100,"e":0},{"h":"7880be8598281b830813b45e2272cd33451e5916e19c42db45802d339398ec01","q":5,"d":11,"s":400,"m":1100,"e":0},{"h":"6dec906ce21222be8bf95b8dabf6f069c7d8d10bcc4bcf19319683030117c37c","q":7,"d":11,"s":400,"m":1100,"e":0},{"h":"ae9db76b3e2d12eb2414bfbbb7413e840cbcae18229d831ad82758814b315c88","q":4,"d":11,"s":400,"m":1100,"e":0},{"h":"1d10e911f0e6701c18e176748b709d5028b5e265c81038e3e9cfb2e81b72e8f0","q":4,"d":11,"s":400,"m":1100,"e":0},{"h":"559cf4af9cfd6272ab597ecb7152613c71d9954796c94b8de4f572f596c54ee6","q":4,"d":11,"s":400,"m":1100,"e":0},{"h":"72e4958932f6953885586f3b87473a0fb027d11417a908fcc9591f7f50429056","q":6,"d":11,"s":400,"m":1100,"e":0},{"h":"86910170fde631e995234b7919decadba0860a55999f120622d3ef29a72b17bf","q":5,"d":11,"s":380,"m":1100,"e":0},{"h":"5bf8ed9ef79f01771dfe31daf738bff7609e43ed241d4a601f4d7cb665d3f113","q":5,"d":11,"s":380,"m":1100,"e":0},{"h":"3faea79374939a9a03b8feb837e8230057e84e0d917287b778a427e2570f871c","q":4,"d":11,"s":360,"m":1100,"e":0},{"h":"bf5c4a16a2d8986e0126b48b2623ba887c868ff40fa11b87e09ce09dc25556d1","q":4,"d":11,"s":360,"m":1100,"e":0},{"h":"8568fddf18c243f4f37829f37b561245e4589ce8978c350d8ff9196340735536","q":5,"d":11,"s":340,"m":1100,"e":0},{"h":"b16ea4437ccd3214824c256d2d10c71aa5e8f9eef916647cf9ee79aa4b5a8ea2","q":4,"d":11,"s":340,"m":1100,"e":0},{"h":"c6b11ca61f136f66ae90f3f83d19b3bfec9637e0226a6297384a8c56d0729c67","q":4,"d":11,"s":340,"m":1100,"e":0},{"h":"30ac3e3222522d7cd990f38eb8c4ea6ce9724d7b5b5d2d8f6589203a16ede7d7","q":4,"d":11,"s":340,"m":1100,"e":0},{"h":"21d8379567bb7b3d9bda5ba2e32a31d9c2664ff052156839ea8966a8b242af7a","q":4,"d":11,"s":300,"m":1100,"e":0},{"h":"959944b87ed71f0c44335195068dc30e59929c778661461a2d17cee5ca929b11","q":3,"d":11,"s":300,"m":1100,"e":0},{"h":"bee5467dc5f60976f82e8b171e1328c099b4539e5d8bc2222d30e09ec1b3e75a","q":4,"d":11,"s":300,"m":1100,"e":0},{"h":"2185bb9e1714c162316bec5a36303584ece3ca299aa7a138f4130a8c6211fd27","q":4,"d":11,"s":280,"m":1100,"e":0},{"h":"adeaa90155208ff8bcfc32cd96a03009931bc65bc49e92cb4f19464876937ef1","q":3,"d":11,"s":280,"m":1100,"e":0},{"h":"fb946fe656f11c0d2fad1b46da70f950f694cd1d0a4cd125322b69c07237a35a","q":4,"d":11,"s":260,"m":1100,"e":0},{"h":"e19bfc4c766a9bc379aa5e48cdd01e76ca9c215ad7deb4ccb16db53f8bc38d35","q":4,"d":11,"s":260,"m":1100,"e":0},{"h":"4d798f6c58f718d51d68636b62eb1adad1cc531d70bd745769f051fbbb9aff5b","q":5,"d":11,"s":260,"m":1100,"e":0},{"h":"6651f7ade1e413ae198fd70a84791b2515a0c8dc66a01166a08481733f12990b","q":4,"d":11,"s":240,"m":1100,"e":0},{"h":"c33cd38c29746aa2ca09acab80557863825217b019afdba6bfec7490610a0eae","q":3,"d":11,"s":240,"m":1100,"e":0},{"h":"8114cd5da950abf2ab584cb1639333f405cd61db6b3220354c94faf0e6f45cdf","q":4,"d":11,"s":240,"m":1100,"e":0},{"h":"c3e4646976ab04aa6c52ab9c3a2c72dacff763599187b5f9ab07127856a1f9b8","q":3,"d":11,"s":240,"m":1100,"e":0},{"h":"f7d47258d1fd865bf3af3b403c45902038724f40a1323ea5430a9b4f2ff3ba6c","q":4,"d":11,"s":240,"m":1100,"e":0},{"h":"e191079209648759f4e95d11d83f20d521341932ce372d7bfec46cc93eb4ff6b","q":3,"d":11,"s":220,"m":1100,"e":0},{"h":"776568ab74de472223b29b72133ab9e1cb33396946ec11af26f258e07aef1ab9","q":3,"d":11,"s":220,"m":1100,"e":0},{"h":"286b55246d01a050a2595d7567f1af7ce1b5dc5fbb7761d9440065800e51fc1e","q":3,"d":11,"s":220,"m":1100,"e":0},{"h":"a3819e216d61d071b3d560d9fdee3545b20218a1e3a484965975321b3e8e6fb4","q":5,"d":11,"s":200,"m":1100,"e":0},{"h":"ec2d30a67431acbf883788c5b0fd528b6f8d13bc634f0381e773da99ebc9e6f7","q":2,"d":11,"s":200,"m":1100,"e":0},{"h":"79974cd2dd0de5d798441a547727605f7e502032ddbbd2d0f733b17836e5158c","q":3,"d":11,"s":200,"m":1100,"e":0},{"h":"f9e243c8665daa3f4379c33f042558a9f21468dc48dbdf9dac67fc1c76959b4a","q":3,"d":11,"s":200,"m":1100,"e":0},{"h":"f5d6e9dc27292eb374354ac1c95c664208704810e1a0fb04bdc701011f068676","q":5,"d":11,"s":200,"m":1100,"e":0},{"h":"8c4be9b8f111110a09f8959b1136c3255d9e95d46ee36a17c322a6fdaf4151da","q":2,"d":11,"s":180,"m":1100,"e":0},{"h":"fb7820e51ea871ca7a14532b393bd80676b3877740d1af2645c583b5d306c7e3","q":2,"d":11,"s":180,"m":1100,"e":0},{"h":"857ee0e0168d4fa153328577dfb19c9990691e4537ca101f93d023f384075c54","q":3,"d":11,"s":180,"m":1100,"e":0},{"h":"2889b843913884589c05ed0a1437f241067255b1eeb243c1fe6f876d85cff793","q":3,"d":11,"s":180,"m":1100,"e":0},{"h":"05d9e3aad4518aa3b3f76cf7e47adc636aaaa172d4f53c1bef1bf6f1015b61ba","q":2,"d":11,"s":180,"m":1100,"e":0},{"h":"f52186df59bdc3a9249267b0edeece1d19c92f4cf34e67832339909456772f9c","q":2,"d":11,"s":180,"m":1100,"e":0},{"h":"c020b7021575d133b5e8a47349e04da47884440a0272f82760017329b57b7d5c","q":4,"d":11,"s":160,"m":1100,"e":0},{"h":"41105dd25eb89cba975cef631722e40ee903b684ed9c8e2cb23b94746e3248be","q":2,"d":11,"s":160,"m":1100,"e":0},{"h":"744f226decd7c9fe32b016e2666665eabff25ee9f5b31a3ec8e64abd91e35f0e","q":2,"d":11,"s":160,"m":1100,"e":0},{"h":"d0a2574a668533f7ef16a8d0a5d53fe638368cfc5acd2641c217297c31dc1cf7","q":2,"d":11,"s":160,"m":1100,"e":0},{"h":"90a305c459cbaf799179cca1a51f4816ba20d68d96d5c0abdb94effbdfdc51ee","q":2,"d":11,"s":160,"m":1100,"e":0},{"h":"ad96010de4f882b04dadbb240681dc776329262c38a1876e88d2494077692b79","q":2,"d":11,"s":160,"m":1100,"e":0},{"h":"4348fcdd4d35fc65e88b012dd7f9b8648284a222daca3ebacaa7b7c5332123a9","q":2,"d":11,"s":160,"m":1100,"e":0},{"h":"3c7ee7443078ee8d346ea1377f32684c9cfea3ecb351334ad2a712d36abf576a","q":3,"d":11,"s":160,"m":1100,"e":0},{"h":"bef9f92b5b7b9a55019bcdde208dca4c13ac2dbb3c6e37e5e42588b1f1b61715","q":2,"d":11,"s":160,"m":1100,"e":0},{"h":"487015fc07465f6f75ff7aecc227378beb7e6029b33b63472e13d3e10374187c","q":3,"d":11,"s":140,"m":1100,"e":0},{"h":"7f2e59d5b50da7de03b4222699bfa3a39b1e18847f3fc44bbe939952c9c7457b","q":2,"d":11,"s":140,"m":1100,"e":0},{"h":"0427c9edea46e9d880e584b74b1d653934d2d8227cbe1fcafb150f5ac0a58bd4","q":2,"d":11,"s":140,"m":1100,"e":0},{"h":"6b07bd39007945bb5eb4cb4ef641752282649dcbc762407ef7778bf0bfbdc9f2","q":2,"d":11,"s":140,"m":1100,"e":0},{"h":"8820952ab71cad685b52894272dc6b48b093cf284a14f87ee14f3491929155aa","q":2,"d":11,"s":140,"m":1100,"e":0},{"h":"b8346b95bfae0d5390049f0b35d2f110aa769f3d2f21ce05522d92adae899701","q":2,"d":11,"s":140,"m":1100,"e":0},{"h":"726ed04f7c64f648a8174610adb0ab15fdfb67d2c0d3244c4bbd2fb66e9b6db1","q":2,"d":11,"s":120,"m":1100,"e":0},{"h":"09848e93f88fd44c532e4bb7a44911de6c146030fd330b75d1541e79b0c4f074","q":2,"d":11,"s":120,"m":1100,"e":0},{"h":"9cfeb2519158bc2fc7e6c40bf1050c1c816e1b3ea2e9f2334f0d0895e38819b7","q":2,"d":11,"s":120,"m":1100,"e":0},{"h":"9f270786006b78bdc19f025439b664e642964022913a3bb2d055200dedfa077e","q":2,"d":11,"s":120,"m":1100,"e":0},{"h":"135686c336a2680134186fd3b616c8465224957d962486d031bbf4ffa54d9816","q":2,"d":11,"s":120,"m":1100,"e":0},{"h":"c91a53e90bb45b2e294f4c127356bd7eee6d3ffa78b4f85085c3153f73ef51f2","q":1,"d":11,"s":100,"m":1100,"e":0},{"h":"8e94f6f126229359e3ad9c4a3c6390665629131681adaa3b2f33d2976285d909","q":1,"d":11,"s":100,"m":1100,"e":0},{"h":"d18c27995931e84d062680f4ba315b18c89d02cd7d6fa85b8bdd893f70e1cda3","q":1,"d":11,"s":100,"m":1100,"e":0},{"h":"295db11f76279b20b145c4e0ea303be99096ba24a6195008933cec17236a7f71","q":1,"d":11,"s":100,"m":1100,"e":0},{"h":"121407dc2579dca932afae24b753dbbf614d074d3623bd11a62e14b94aecff0f","q":1,"d":11,"s":100,"m":1100,"e":0},{"h":"89bf4c1d3bd40a3ea38441a282e47f6925cc9b92bb70e208f33ef1160e1a8dcd","q":1,"d":11,"s":100,"m":1100,"e":0},{"h":"96daa5deb663c3103288dcc69fce8e2ece7c4110e8d93775fa6dbed4a937ec76","q":1,"d":11,"s":100,"m":1100,"e":0},{"h":"ce6262eef617a31837416850d01bf975c3762ed4649d157d9f6f780588714b08","q":1,"d":11,"s":100,"m":1100,"e":0},{"h":"a6a954a72120f22f62ca999df28d2f81145125e53e90ddb75d73dc72c31ca59b","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"bb1c00ca702e9d8b2926e4c0eb7acea802e406228736289fc7012d318d31d56d","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"7b442a82c87ccf0a9c1ced99f681d95a400af40b0ab353c154628ba691119d2f","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"9d79724e38f3570dd2b44165810c20b80252dc53da4ec6bb8187c1fe0921362d","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"3fc6aeaeef10b300cbf300c6336f4a14c7450616cf1e952fdb50872896f10d90","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"a8178767e959506f3d07b09de0ee56da1c9432128c12d6842ec0d990c9d3bb36","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"0aed3dafb45df542ae866bdc517562f5e6bf7fbc18c787ca3368c3eceacb6f26","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"994ea625e6d5fe907c3c55463846f4d648a3f6670bc1ac236bcdc8ecc9e163c2","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"9bda727b64f7887d9cc7c29a5beabe1f6eff25107f056da7793b453be787a96a","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"1cb6557f9b2c73c639d539d51b30936081cc5e52774532cd839e32f07e8531a4","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"fdf281787444fe69add0fea6827c3c4cd6b794ac226e95670b3aafcc06d13d09","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"525661e9c981d459358708d397d9c25d58c96d0c14b5b81cca0ef9711538bc55","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"61f6d0ec78844584cb2777973c89bf316d6f17f65038fb2e731abbf6842e336b","q":2,"d":11,"s":80,"m":1100,"e":0},{"h":"a4393f9e877191bb06969882de8ad7e2a7090af65d43b7c0ff96e8dec68ad2b6","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"b25349b30251241a1d25c7f5a649494af4cc807a29dbd06dbee9d2c11c1d87c1","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"a71c038cd47ef8c65de5c2b50b0e5cdf4c7ea2e29cfcc784557af27b0c2c8eb7","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"ac67c74c970527f25ef528f6b47f87e13e4d240ca5be4a1294d55d8ec2120595","q":2,"d":11,"s":80,"m":1100,"e":0},{"h":"9fe147e338313d909e6f03d567136dbf2a0a544242cc3aaddae61b68f99bd213","q":1,"d":11,"s":80,"m":1100,"e":0},{"h":"411beb9a8395c1c013e1591d83b8d32b73116c2cc2ba3bb58c4a4e63a9cf3198","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"83593de77d3f0d3716eef37c3b859c16e41668ef6d3c7b97db73029dc3cc252e","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"147522b2a9f55934377436d6e150737df1a5bda64ddd1a329436f14f16b67274","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"0eb431afd3ae1c695e8d06a9e0fae92e7e3bfc458dae3b0fa8969dc1eaec4eb6","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"048d5fb174c3845dd1a9dcaa2f05711ed3ef7932c5e3dcb8bc2af5d728d25874","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"f85b4354ddb1b7c049d1a224b68222a53b18b7a74deb26e2129320980c90424e","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"0b671888f48c07651f9cb3c0ce2fe660d3223cb7335fdee16c38b16a6194e0e2","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"736c39ba3532a77093ed6057ce525c0c08ecea7bec65fab7bb30c641b6a8ae96","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"e83eaca89f1c9fc12b48b4dba395cbd04a2658e004da552896dd522350b662fc","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"3f6fa3df40e9d683f102e307a97b2a90a0b5597da963dd10eb22182e0f9e1951","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"e2d00b9c9f43a8365c762fc4f796db9d13bea38d96313569daac2461e768f8b0","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"ab2c973abe9644c963b73964017e08e6accfee9cf5d29080bbc9922cdbdf6c4d","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"c8222b68f36f67e6979ca49805d874fd28a57ea8b334079a5f3d05566b8c331d","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"1b2f929f4c34f9058efabc05a7212a7dac009776d5ba0b0c45f0568f115467ac","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"c2ecf4423dab0c80c4fbac55c00b06000e9c0ebb7f4c6a1b0d245ab3e725eabb","q":1,"d":11,"s":60,"m":1100,"e":0},{"h":"e6a2493ada03d1e54c256001965bf45beb51234ea356ebba22fe61470d1ac454","q":2,"d":11,"s":60,"m":1100,"e":0},{"h":"74e4d4ec8f04c5ae5bd629d78cd69d04a4172a3a75e272fc5a6ec3d44ddc19ff","q":1,"d":11,"s":40,"m":1100,"e":0},{"h":"297a5874c5ce59adf6677537cbd9dc01e8c4fa71e719903ba747fcca18283387","q":1,"d":11,"s":40,"m":1100,"e":0},{"h":"d5f39330235cf4d30f7c3353ed37135c27bd99ef9f567608a54bab3dd7c101fb","q":1,"d":11,"s":40,"m":1100,"e":0},{"h":"158ef44d07dca0814ba9c3cdd057a0ac36f09df05c8cb4e977dad11b62366491","q":1,"d":11,"s":40,"m":1100,"e":0},{"h":"07085f573c726e2f6375d57f95638aef95437262b75099852d78029ab0c73e5b","q":1,"d":11,"s":40,"m":1100,"e":0},{"h":"6419d69394513c5c9b899c75f7d0fa69296980ad22dc225b50aef2e87ffe7872","q":1,"d":11,"s":40,"m":1100,"e":0},{"h":"3c68c3c40154471b7f3cc5838bc85e457bfe29dc6137167bda9614ddf52d10b5","q":1,"d":11,"s":40,"m":1100,"e":0},{"h":"93d21909940228049ab37e78021edafadad230fbc216c493a02ff98d8a16bfe6","q":1,"d":11,"s":40,"m":1100,"e":0},{"h":"f5de7612129d8e30d0655b3d56d94023d96a34d6a0987eb0f6d8ecc75dbc2566","q":1,"d":11,"s":20,"m":1100,"e":0},{"h":"a2943a93852e3be54273b610b9aa640088f06f2810cc6cb009969ed500f337ac","q":1,"d":11,"s":20,"m":1100,"e":0},{"h":"d708689ec2125e36a0df16652bc9f410a68511ece5e682806d677a37072defb0","q":1,"d":11,"s":20,"m":1100,"e":0},{"h":"5fd4d56d05c36fd6fb00abb5e7271adef4286b3df99dd1c3c0cd7611989c95ed","q":1,"d":11,"s":20,"m":1100,"e":0},{"h":"c8625206ef299426e2615e81c3e6bb6c2dda61839e00bbeea8b01c640816ba36","q":1,"d":11,"s":20,"m":1100,"e":0},{"h":"65feddcd52bf8062954f56dc38edade622eb1161c5c3c8e333496ea49a98c509","q":1,"d":11,"s":0,"m":1100,"e":0}];
+  const INDEX = new Map(DB.map(function(d){ return [d.h, d]; }));
+
+  const ICON_OK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  const ICON_NO = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>';
+
+  const $ = function(id){ return document.getElementById(id); };
+  const tel=$("tel"), go=$("go"), msg=$("msg"), msgText=$("msg-text"),
+        result=$("result"), card=document.querySelector(".card"),
+        reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function canonical(raw){
+    var d = String(raw||"").replace(/\D/g,"");
+    if (d.indexOf("55")===0 && (d.length===12 || d.length===13)) d = d.slice(2);
+    if (d.length===10) d = d.slice(0,2) + "9" + d.slice(2);
+    return d;
+  }
+  async function sha256(str){
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");
+  }
+  function fmtPct(p){
+    var r = Math.round(p*10)/10;
+    return (r % 1 === 0) ? String(r) : r.toFixed(1).replace(".",",");
+  }
+  function clearStates(){ msg.classList.remove("show"); result.classList.remove("show"); }
+  function showMsg(text){
+    result.classList.remove("show");
+    msgText.textContent = text;
+    msg.classList.add("show");
+    card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake");
+  }
+  function animateNumber(el, target, dur, fmt){
+    if (reduce){ el.textContent = fmt(target); return; }
+    var start = performance.now();
+    function step(now){
+      var t = Math.min(1,(now-start)/dur);
+      var e = 1 - Math.pow(1-t,3);
+      el.textContent = fmt(target*e);
+      if (t<1) requestAnimationFrame(step); else el.textContent = fmt(target);
+    }
+    requestAnimationFrame(step);
+  }
+  function showResult(d){
+    msg.classList.remove("show");
+    var pct = d.m ? (d.s/d.m*100) : 0;
+    var den = d.d || 11;
+
+    $("qd").textContent = "de " + den;
+    $("cap").textContent = d.s + " de " + d.m + " pontos possíveis";
+
+    var badge = $("badge");
+    if (d.e === 1){
+      badge.className = "badge ok";
+      badge.innerHTML = ICON_OK + "<span>Elegível para o ranking final</span>";
+    } else {
+      badge.className = "badge no";
+      badge.innerHTML = ICON_NO + "<span>Não elegível · exige 8 dos 11 quizzes</span>";
+    }
+
+    var R=86, C=2*Math.PI*R, prog=$("prog");
+    prog.style.strokeDasharray = C.toFixed(2);
+    prog.style.strokeDashoffset = C.toFixed(2);
+
+    result.classList.add("show");
+
+    animateNumber($("q"), d.q, 700, function(v){ return String(Math.round(v)); });
+    animateNumber($("score"), d.s, 900, function(v){ return String(Math.round(v)); });
+    animateNumber($("pct"), pct, 1000, fmtPct);
+
+    var offset = C*(1 - Math.max(0,Math.min(100,pct))/100);
+    if (reduce){ prog.style.strokeDashoffset = offset.toFixed(2); }
+    else { requestAnimationFrame(function(){ requestAnimationFrame(function(){ prog.style.strokeDashoffset = offset.toFixed(2); }); }); }
+  }
+  async function consult(){
+    var raw = tel.value;
+    if (String(raw||"").replace(/\D/g,"").length === 0){
+      showMsg("Informe o telefone cadastrado para consultar.");
+      tel.focus(); return;
+    }
+    go.disabled = true;
+    try{
+      var key = await sha256(SALT + canonical(raw));
+      var d = INDEX.get(key);
+      if (d) showResult(d);
+      else showMsg("Telefone não localizado. Confira os números digitados e tente novamente.");
+    }catch(e){
+      showMsg("Não foi possível processar a consulta neste ambiente. Abra a página pelo link publicado e tente novamente.");
+    }finally{ go.disabled = false; }
+  }
+  go.addEventListener("click", consult);
+  tel.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); consult(); }});
+  tel.addEventListener("input", clearStates);
+  $("again").addEventListener("click", function(){
+    clearStates(); tel.value=""; tel.focus();
+    card.scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"start"});
+  });
+  (function(){
+    var n=14, frag=document.createDocumentFragment();
+    for(var i=0;i<n;i++){
+      var s=document.createElement("span"); s.className="dot";
+      s.style.left=(Math.random()*100)+"vw";
+      s.style.top=(Math.random()*100)+"vh";
+      s.style.animationDuration=(7+Math.random()*9)+"s";
+      s.style.animationDelay=(-Math.random()*12)+"s";
+      var sc=.6+Math.random()*1.1; s.style.transform="scale("+sc+")";
+      frag.appendChild(s);
+    }
+    document.body.appendChild(frag);
+  })();
+</script>
+</body>
+</html>
